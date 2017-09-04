@@ -63,24 +63,29 @@ class App extends Component {
     //This arrow statement keeps this working
     .then((response) => {
       let endpoint = response.data.tag.media.page_info.end_cursor
-      console.log(response)
+      // console.log(response)
+
+
       this.setState({
         imgList: response.data.tag.media.nodes,
       });
-      console.log(this.state.imgList)
+      // console.log(this.state.imgList)
 
 
 
-      //This is me trying to get more photos
+      // // This is me trying to get more photos
 
       // if (response.data.tag.media.page_info.has_next_page) {
         
       //   //Just ensuring the state is passed properly
-      //   console.log(`https://www.instagram.com/graphql/query/?query_id=17882293912014529&tag_name=${this.state.oldtag}&first=100&after=${endpoint}`)
+      //   // console.log(`https://www.instagram.com/graphql/query/?query_id=17882293912014529&tag_name=${this.state.oldtag}&first=100&after=${endpoint}`)
+
+        
 
       //   axios.get(`https://www.instagram.com/graphql/query/?query_id=17882293912014529&tag_name=${this.state.oldtag}&first=100&after=${endpoint}`).then((responseAgain) => {
-      //     console.log(responseAgain)
-      //     if (responseAgain.data.data.hashtag.edge_hashtag_to_media.edges !== 0) {
+      //     // console.log(response)
+      //     console.log(responseAgain.data.data.hashtag.edge_hashtag_to_media)
+      //     if (responseAgain.data.data.hashtag.edge_hashtag_to_media.count !== 0) {
       //       this.setState({
       //         imgList: responseAgain.data.data.hashtag.edge_hashtag_to_media.edges,
       //       });
@@ -99,10 +104,10 @@ class App extends Component {
       // }
       
       // else {
-        // this.setState({
-        //   imgList: response.data.tag,
-        // });
-        // console.log(this.state.imgList)
+      //   this.setState({
+      //     imgList: response.data.tag.media.nodes,
+      //   });
+      //   console.log(this.state.imgList)
       // }
 
       //Send and create  new component with images
