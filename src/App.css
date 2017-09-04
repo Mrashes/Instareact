@@ -1,3 +1,12 @@
+.image {
+  height:200px;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+/* 
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: #fff;
@@ -80,6 +89,7 @@ input {
   width: 100%;  
 }
 
+
 ul {
   display: flex;
   flex-wrap: wrap;
@@ -131,4 +141,4 @@ button {
   font-size: 14px;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
   padding: 10px 6px;
-}
+} */

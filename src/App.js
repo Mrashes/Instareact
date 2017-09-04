@@ -1,47 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 const axios = require('axios');
 
 class Images extends Component {
   render = () => {
-    if (this.props.imglist.nodes !== undefined) {
       return (
         <div>
           <section>
-            <div>
-              <ul>
-              </ul>
-            </div>
-          </section>
-          <section>
-            <div>
-              <ul>
-                {this.state.imglist.map((nodes) => {
-                  return (
-                    <li key={nodes.id}>
-                      <img src={nodes.display_src}/>
-                      {/* <h3>{nodes.title}</h3>
-                      <p>brought by: {nodes.user}</p>
-                      <button onClick={() => this.removeItem(nodes.id)}>Remove Item</button> */}
-                    </li>
-                  )
-                })}
-              </ul>
+            <div className="flex">
+              {this.props.imglist.map((node) => {
+                return (
+                  <div key={node.id}>
+                    <img className="image" src={node.display_src} alt="instagram" />
+                    {/* <h3>{nodes.title}</h3>
+                    <p>brought by: {nodes.user}</p>
+                    <button onClick={() => this.removeItem(nodes.id)}>Remove Item</button> */}
+                  </div>
+                )
+              })}
             </div>
           </section>
         </div>
 
       )
-    }
-    else {
-      return (
-        <div>
-        Need data to do this
-        </div>
-      )
-    }
-
   }
 }
 
@@ -51,7 +33,8 @@ class App extends Component {
 		super();
 		this.state = {
       tag: "",
-      imgList: []
+      imgList: [{id: 1,
+                 display_src: ""}]
 		}
 		this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -68,18 +51,62 @@ class App extends Component {
 	  e.preventDefault();
     this.scrape(this.state.tag)
 	  this.setState({
+      oldtag: this.state.tag,
 	    tag: '',
     });
   }
 
   scrape = () => {
+    console.log(this.state.tag)
     axios.get(`https://www.instagram.com/explore/tags/${this.state.tag}/?__a=1`)
+    // `https://www.instagram.com/graphql/query/?query_id=17882293912014529&tag_name=${this.state.oldtag}&first=100&after=${endpointpulled from last query}`
     //This arrow statement keeps this working
     .then((response) => {
+      let endpoint = response.data.tag.media.page_info.end_cursor
+      console.log(response)
       this.setState({
         imgList: response.data.tag.media.nodes,
       });
       console.log(this.state.imgList)
+
+
+
+      //This is me trying to get more photos
+
+      // if (response.data.tag.media.page_info.has_next_page) {
+        
+      //   //Just ensuring the state is passed properly
+      //   console.log(`https://www.instagram.com/graphql/query/?query_id=17882293912014529&tag_name=${this.state.oldtag}&first=100&after=${endpoint}`)
+
+      //   axios.get(`https://www.instagram.com/graphql/query/?query_id=17882293912014529&tag_name=${this.state.oldtag}&first=100&after=${endpoint}`).then((responseAgain) => {
+      //     console.log(responseAgain)
+      //     if (responseAgain.data.data.hashtag.edge_hashtag_to_media.edges !== 0) {
+      //       this.setState({
+      //         imgList: responseAgain.data.data.hashtag.edge_hashtag_to_media.edges,
+      //       });
+      //     }
+      //     else {
+      //       this.setState({
+      //         imgList: response.data.tag.nodes,
+      //       });
+      //     }
+
+      //     // console.log(responseAgain.data.data.hashtag.edge_hashtag_to_media.edges)
+      //   })    
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
+      // }
+      
+      // else {
+        // this.setState({
+        //   imgList: response.data.tag,
+        // });
+        // console.log(this.state.imgList)
+      // }
+
+      //Send and create  new component with images
+
     })
     .catch(function (error) {
       console.log(error);
@@ -95,6 +122,7 @@ class App extends Component {
             <input type="submit" className="ghost-button" value="Get Images"></input>
           </form>
         </section>
+        <Images imglist={this.state.imgList} />
       </div>
 		)
 	};
