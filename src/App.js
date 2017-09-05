@@ -12,7 +12,7 @@ class Images extends Component {
               {this.props.imglist.map((node) => {
                 return (
                   <div key={node.id}>
-                    <img className="image" src={node.display_src} alt="instagram" />
+                    <img className="image" src={node.display_src} alt="instagram picture" />
                     {/* <h3>{nodes.title}</h3>
                     <p>brought by: {nodes.user}</p>
                     <button onClick={() => this.removeItem(nodes.id)}>Remove Item</button> */}
@@ -34,7 +34,7 @@ class App extends Component {
 		this.state = {
       tag: "",
       imgList: [{id: 1,
-                 display_src: ""}]
+                 display_src: ""}],
 		}
 		this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,33 +48,43 @@ class App extends Component {
   }
 
   handleSubmit(e) {
-	  e.preventDefault();
-    this.scrape(this.state.tag)
-	  this.setState({
+    e.preventDefault();
+    this.setState({
       oldtag: this.state.tag,
 	    tag: '',
     });
+    this.scrape(this.state.tag.split(' ').join(''))
+
   }
 
-  scrape = () => {
-    console.log(this.state.tag)
-    axios.get(`https://www.instagram.com/explore/tags/${this.state.tag}/?__a=1`)
+  // getInitialState() {
+  //   return { showResults: false };
+  // }
+  // onClick () {
+  //     this.setState({ showResults: true });
+  // }
+
+
+  scrape = (tag) => {
+    console.log(tag)
+    axios.get(`https://www.instagram.com/explore/tags/${tag}/?__a=1`)
     // `https://www.instagram.com/graphql/query/?query_id=17882293912014529&tag_name=${this.state.oldtag}&first=100&after=${endpointpulled from last query}`
     //This arrow statement keeps this working
     .then((response) => {
-      let endpoint = response.data.tag.media.page_info.end_cursor
-      // console.log(response)
+      if (response.data.tag.media.count == 0) {
+        this.setState({
+          imgList: response.data.tag.top_posts.nodes,
+        });
+      }
 
-
-      this.setState({
-        imgList: response.data.tag.media.nodes,
-      });
-      // console.log(this.state.imgList)
-
-
+      else {
+        this.setState({
+          imgList: response.data.tag.media.nodes,
+        });
+      }
 
       // // This is me trying to get more photos
-
+      // let endpoint = response.data.tag.media.page_info.end_cursor
       // if (response.data.tag.media.page_info.has_next_page) {
         
       //   //Just ensuring the state is passed properly
