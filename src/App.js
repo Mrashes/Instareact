@@ -24,6 +24,20 @@ class Images extends Component {
   }
 }
 
+class Input extends Component {
+  
+  render = () => {
+    return (
+      <section className='add-item'>
+          <form onSubmit={this.props.handleSubmit}>
+            <input type="text" name="tag" className="ghost-input" placeholder="Tag to search"  onChange={this.props.handleChange} value={this.props.tag} required></input>
+            <input type="submit" className="ghost-button" value="Get Images"></input>
+          </form>
+        </section>
+    )
+  }
+}
+
 
 class App extends Component {
 	constructor() {
@@ -68,7 +82,7 @@ class App extends Component {
     //This arrow statement keeps this working
     .then((response) => {
       // This is me trying to get more photos
-      let endpoint = response.data.tag.media.page_info.end_cursor
+      // let endpoint = response.data.tag.media.page_info.end_cursor
 
       if (response.data.tag.media.count === 0) {
         this.setState({
@@ -84,7 +98,6 @@ class App extends Component {
           // setTimeout(function() { this.secondScrape(endpoint); }.bind(this), 20000);
         }
       }      
-
     })
     .catch(function (error) {
       console.log(error);
@@ -110,12 +123,7 @@ class App extends Component {
 	render = () => {
 		return (
       <div className='container'>
-        <section className='add-item'>
-          <form onSubmit={this.handleSubmit}>
-            <input type="text" name="tag" className="ghost-input" placeholder="Tag to search"  onChange={this.handleChange} value={this.state.tag} required></input>
-            <input type="submit" className="ghost-button" value="Get Images"></input>
-          </form>
-        </section>
+        <Input handleChange={this.handleChange} handleSubmit={this.handleSubmit} tag={this.state.tag} />
         <Images imglist={this.state.imgList} />
       </div>
 		)
